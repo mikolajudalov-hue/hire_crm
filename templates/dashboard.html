@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+
+{% block title %}Обзор — TopHire{% endblock %}
+
+{% block content %}
+<section class="card">
+    <div class="card-header">
+        <div>
+            <h1 class="page-title">
+                Здравствуйте, {{ name or "сотрудник" }}.
+            </h1>
+            <p class="page-subtitle">
+                Здесь вы можете посмотреть табель рабочего времени и начисления в TopHire.
+            </p>
+        </div>
+    </div>
+
+    <div class="summary-grid">
+        <div class="summary-card">
+            <h2 class="summary-title">Последний табель</h2>
+            <p class="summary-text">
+                Отработанные часы за последний доступный месяц.
+            </p>
+            <a href="{{ url_for('view', type='hours') }}" class="btn btn-primary">
+                Открыть табель
+            </a>
+        </div>
+        <div class="summary-card">
+            <h2 class="summary-title">Последний расчёт</h2>
+            <p class="summary-text">
+                Детали начислений и удержаний за последний доступный месяц.
+            </p>
+            <a href="{{ url_for('view', type='salary') }}" class="btn btn-secondary">
+                Открыть начисления
+            </a>
+        </div>
+    </div>
+</section>
+
+{% if months %}
+<section class="card">
+    <div class="card-header">
+        <div>
+            <h2 class="section-title">Все месяцы</h2>
+            <p class="section-subtitle">
+                Выберите месяц, чтобы посмотреть табель или начисления.
+            </p>
+        </div>
+    </div>
+
+    <div class="month-grid">
+        {% for month in months %}
+        <div class="month-row">
+            <div class="month-label">{{ month }}</div>
+            <div class="month-links">
+                <a href="{{ url_for('view', type='hours', month=month) }}" class="chip-link">
+                    Табель
+                </a>
+                <a href="{{ url_for('view', type='salary', month=month) }}" class="chip-link chip-link-muted">
+                    Начисления
+                </a>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</section>
+{% else %}
+<section class="card">
+    <p class="text-muted">
+        Пока нет доступных отчётов. Если вы считаете, что это ошибка, обратитесь в HR-отдел TopHire.
+    </p>
+</section>
+{% endif %}
+{% endblock %}

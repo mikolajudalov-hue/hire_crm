@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+
+{% block title %}Табель рабочего времени — {{ month }} — TopHire{% endblock %}
+
+{% block content %}
+<section class="card">
+    <div class="card-header">
+        <div>
+            <h1 class="page-title">Табель рабочего времени</h1>
+            <p class="page-subtitle">
+                Период: <span class="pill">{{ month }}</span>
+            </p>
+        </div>
+        <div class="card-actions">
+            <a href="{{ url_for('dashboard') }}" class="btn btn-ghost">← Обзор</a>
+            <a href="{{ url_for('view', type='salary', month=month) }}" class="btn btn-secondary">
+                Начисления за этот месяц
+            </a>
+        </div>
+    </div>
+
+    {% if columns and values %}
+    <div class="table-wrapper">
+        <table class="data-table">
+            <thead>
+                <tr>
+                    {% for column in columns %}
+                    <th>{{ column }}</th>
+                    {% endfor %}
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    {% for value in values %}
+                    <td>{{ value }}</td>
+                    {% endfor %}
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <p class="text-muted">
+        Для этого периода пока нет данных.
+    </p>
+    {% endif %}
+
+    {% if total %}
+    <div class="total-badge">
+        <span class="total-label">Всего часов</span>
+        <span class="total-value">{{ total }}</span>
+    </div>
+    {% endif %}
+</section>
+{% endblock %}

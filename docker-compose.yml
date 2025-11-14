@@ -1,0 +1,13 @@
+version: '3.8'
+
+services:
+  web:
+    build: .
+    ports:
+      - "8080:8080"
+    environment:
+      # Load environment variables from .env file for local development
+      - FLASK_ENV=development
+    # Optional: Mount the current directory to enable live code changes (for development only)
+    # volumes:
+    #   - .:/app

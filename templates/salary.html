@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+
+{% block title %}Начисления — {{ month }} — TopHire{% endblock %}
+
+{% block content %}
+<section class="card">
+    <div class="card-header">
+        <div>
+            <h1 class="page-title">Начисления и удержания</h1>
+            <p class="page-subtitle">
+                Период: <span class="pill">{{ month }}</span>
+            </p>
+        </div>
+        <div class="card-actions">
+            <a href="{{ url_for('dashboard') }}" class="btn btn-ghost">← Обзор</a>
+            <a href="{{ url_for('view', type='hours', month=month) }}" class="btn btn-secondary">
+                Часы за этот месяц
+            </a>
+        </div>
+    </div>
+
+    {% if columns and row %}
+    <div class="salary-grid">
+        {% for column, value in zip(columns, row) %}
+        <div class="salary-card">
+            <span class="salary-label">{{ column }}</span>
+            <span class="salary-value {% if 'Начислено' in column or 'Итого' in column %}salary-value-accent{% elif 'Удержано' in column %}salary-value-danger{% endif %}">
+                {{ value }}
+            </span>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <p class="text-muted">
+        Для этого периода пока нет данных по начислениям.
+    </p>
+    {% endif %}
+
+    {% if note %}
+    <div class="note-block">
+        <div class="note-title">Комментарий по расчёту</div>
+        <p class="note-text">{{ note }}</p>
+    </div>
+    {% endif %}
+</section>
+{% endblock %}

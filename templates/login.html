@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% block title %}Вход в личный кабинет — TopHire{% endblock %}
+
+{% block content %}
+<div class="auth-layout">
+    <section class="card auth-card">
+        <div class="auth-header">
+            <div class="auth-badge">Сотрудникам TopHire</div>
+            <h1 class="auth-title">Вход в личный кабинет</h1>
+            <p class="auth-subtitle">
+                Введите свой номер PESEL, чтобы посмотреть отработанные часы и начисления.
+            </p>
+        </div>
+
+        <form method="post" class="auth-form">
+            <label for="pesel" class="field-label">PESEL</label>
+            <input
+                id="pesel"
+                name="pesel"
+                type="text"
+                inputmode="numeric"
+                maxlength="11"
+                autocomplete="off"
+                class="field-input"
+                placeholder="Например, 88010112345"
+                required
+            >
+            <p class="field-hint">
+                Мы используем PESEL только для безопасной идентификации вас в системе TopHire.
+            </p>
+            <button type="submit" class="btn btn-primary btn-full">
+                Войти
+            </button>
+        </form>
+    </section>
+</div>
+{% endblock %}

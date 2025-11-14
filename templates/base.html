@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}TopHire — личный кабинет сотрудника{% endblock %}</title>
+    <meta name="description" content="TopHire — личный кабинет сотрудника для просмотра табеля рабочего времени и начислений.">
+    <meta name="theme-color" content="#f5f5f7">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="app">
+        <header class="app-header">
+            <div class="brand">
+                <div class="brand-mark">TH</div>
+                <div class="brand-text">
+                    <div class="brand-name">TopHire</div>
+                    <div class="brand-subtitle">Личный кабинет сотрудника</div>
+                </div>
+            </div>
+
+            {% if session.get("pesel") %}
+            <nav class="app-nav">
+                <a href="{{ url_for('dashboard') }}" class="nav-link">Обзор</a>
+                <a href="{{ url_for('view', type='hours') }}" class="nav-link">Часы</a>
+                <a href="{{ url_for('view', type='salary') }}" class="nav-link">Начисления</a>
+
+                <div class="nav-earned">
+                    <span class="nav-earned-label">Заработано</span>
+                    <span class="nav-earned-value">{{ session.get("earned", "0") }} zł</span>
+                </div>
+
+                <span class="nav-divider"></span>
+
+                <div class="nav-user">
+                    <span class="nav-user-name">{{ session.get("name", "Сотрудник") }}</span>
+                    <span class="nav-user-id">PESEL {{ session.get("pesel") }}</span>
+                </div>
+
+                <a href="{{ url_for('logout') }}" class="nav-link nav-link-quiet">Выйти</a>
+            </nav>
+            {% endif %}
+        </header>
+
+        <main class="app-main">
+            {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+            <div class="flash-container">
+                {% for category, message in messages %}
+                <div class="flash flash-{{ category }}">
+                    <span class="flash-dot"></span>
+                    <span>{{ message }}</span>
+                </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+            {% endwith %}
+
+            {% block content %}{% endblock %}
+        </main>
+
+        <footer class="app-footer">
+            <span>© 2025 TopHire.</span>
+            <span class="footer-dot">•</span>
+            <span>Поддержка: HR-отдел TopHire</span>
+        </footer>
+    </div>
+</body>
+</html>
