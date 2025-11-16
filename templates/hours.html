@@ -13,129 +13,71 @@
         </div>
     </div>
 
-    <div class="hours-table-container">
-        <table class="hours-table">
-            <thead>
-                <tr>
-                    {% for col in columns %}
-                        {% if col != "PESEL" %}
-                            <th class="{% if col in ['Имя','Фамилия'] %}fixed-col{% endif %}">{{ col }}</th>
-                        {% endif %}
-                    {% endfor %}
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    {% for col, val in zip(columns, values) %}
-                        {% if col != "PESEL" %}
-                            <td class="day-cell 
-                                {% if val == 8 %}day-normal
-                                {% elif val == 0 %}day-zero
-                                {% endif %}
-                                {% if col in ['Имя','Фамилия'] %}fixed-col{% endif %}
-                            ">
-                                {{ val }}
-                            </td>
-                        {% endif %}
-                    {% endfor %}
-                </tr>
-            </tbody>
-        </table>
+    <div class="hours-grid-header">
+        {% for col in columns %}
+            {% if col != "PESEL" %}
+                <div class="grid-header 
+                    {% if col in ['Имя','Фамилия'] %}fixed-col{% endif %}
+                ">
+                    {{ col }}
+                </div>
+            {% endif %}
+        {% endfor %}
+    </div>
+
+    <div class="hours-grid">
+        {% for col, val in zip(columns, values) %}
+            {% if col != "PESEL" %}
+                <div class="grid-cell 
+                    {% if val == 8 %}day-normal{% elif val == 0 %}day-zero{% endif %}
+                    {% if col in ['Имя','Фамилия'] %}fixed-col{% endif %}
+                ">
+                    {{ val }}
+                </div>
+            {% endif %}
+        {% endfor %}
     </div>
 
 </div>
 
 <style>
-.hours-wrapper {
-    padding: 20px 10px;
+/* === STRUCTURE === */
+
+.hours-grid-header,
+.hours-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+    /* 👆 ВАЖНО: автоперенос */
+    gap: 6px;
+    margin-bottom: 12px;
 }
 
-.hours-header {
-    margin-bottom: 20px;
-}
-
-.hours-header h1 {
-    margin: 0;
-    font-size: 28px;
-    font-weight: 600;
-}
-
-.period {
-    margin-top: 4px;
-    font-size: 16px;
-    color: #8aa0c0;
-}
-
-.hours-controls {
-    margin-top: 15px;
-    display: flex;
-    gap: 10px;
-}
-
-.btn-back, .btn-salary {
-    padding: 8px 16px;
-    border-radius: 8px;
-    background: #112544;
-    color: #bcd8ff;
-    text-decoration: none;
-    transition: 0.2s;
-}
-
-.btn-back:hover, .btn-salary:hover {
-    background: #19345d;
-}
-
-/* === TABLE === */
-
-.hours-table-container {
-    margin-top: 20px;
-    overflow-x: auto;
-    border-radius: 10px;
-}
-
-.hours-table {
-    width: max-content;
-    border-collapse: collapse;
-    font-size: 15px;
-}
-
-.hours-table th {
+.grid-header {
     background: #0a2a6b;
-    padding: 10px 14px;
+    padding: 10px;
     font-weight: 600;
     color: #d1e3ff;
-    white-space: nowrap;
-    border-bottom: 2px solid #1b3d87;
-}
-
-.hours-table td {
-    padding: 10px 14px;
     text-align: center;
-    white-space: nowrap;
+    border-radius: 6px;
+}
+
+.grid-cell {
     background: #0f1e38;
+    padding: 10px;
     color: #eaeef6;
-    border-bottom: 1px solid #22324b;
+    text-align: center;
+    border-radius: 6px;
 }
 
-/* Фиксированная колонка слева */
+/* Цветовая подсветка */
+.day-normal { background: #103d2e !important; color: #5bffaf; }
+.day-zero   { background: #2d2d2d !important; color: #b5b5b5; }
+
+/* Фиксация левой части (Имя + Фамилия) */
 .fixed-col {
-    position: sticky;
-    left: 0;
     background: #10294d !important;
-    z-index: 20;
+    font-weight: 600;
 }
-
-/* Подсветка */
-.day-normal {
-    background: #103d2e !important;
-    color: #5bffaf;
-}
-
-.day-zero {
-    background: #2d2d2d !important;
-    color: #b5b5b5;
-}
-
 </style>
 
 {% endblock %}
