@@ -47,6 +47,16 @@ def login():
         session["months"] = res.get("months", [])
         return redirect(url_for("dashboard"))
     return render_template("login.html")
+    
+@app.context_processor
+def inject_globals():
+    return {
+        "earned": session.get("earned", 0),
+        "name": session.get("name", ""),
+        "pesel": session.get("pesel", "")
+    }
+
+
 
 @app.route("/dashboard")
 def dashboard():
