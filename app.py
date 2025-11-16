@@ -13,7 +13,7 @@ app.secret_key = os.getenv("FLASK_SECRET", "supersecret1234567890")
 
 GAS_WEBAPP_URL = os.getenv(
     "GAS_WEBAPP_URL",
-    "https://script.google.com/macros/s/AKfycbwvvMe6lstPQPPG9ZlQUcdYkzmC0VnveFWBAVQtdfF6aTFgL49rwNgFGlHN4ibSVGvp/exec"
+    "https://script.google.com/macros/s/AKfycbwr_-DVY8tHVrZ0NwVKEAxk1a1Nj0KBrD-LrCeQHvKTY7RETCxvaJaixZM4kmeSYJhh/exec"
 ).strip()
 
 def gas_call(params):
