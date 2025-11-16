@@ -4,33 +4,36 @@
 {% block content %}
 <div class="hours-wrapper">
 
-    <div class="hours-header">
-        <h1>Табель рабочего времени</h1>
-        <div class="period">Период: {{ month }}</div>
-        <div class="hours-controls">
-            <a href="{{ url_for('dashboard') }}" class="btn-back">← Обзор</a>
-            <a href="{{ url_for('view', type='salary', month=month) }}" class="btn-salary">Начисления за этот месяц</a>
-        </div>
+    <h1>Табель рабочего времени</h1>
+    <div class="period">Период: {{ month }}</div>
+
+    <div class="hours-controls">
+        <a href="{{ url_for('dashboard') }}" class="btn-back">← Обзор</a>
+        <a href="{{ url_for('view', type='salary', month=month) }}" class="btn-salary">Начисления за этот месяц</a>
     </div>
 
-    <div class="hours-grid-header">
+    <!-- Блок заголовков -->
+    <div class="hours-header-grid">
+        <div class="title-cell">Имя</div>
+        <div class="title-cell">Фамилия</div>
+
         {% for col in columns %}
-            {% if col != "PESEL" %}
-                <div class="grid-header 
-                    {% if col in ['Имя','Фамилия'] %}fixed-col{% endif %}
-                ">
-                    {{ col }}
-                </div>
+            {% if col != "PESEL" and col not in ["Имя","Фамилия"] %}
+                <div class="day-header">{{ col }}</div>
             {% endif %}
         {% endfor %}
     </div>
 
-    <div class="hours-grid">
+    <!-- Блок значений -->
+    <div class="hours-values-grid">
+        <div class="value-cell name-cell">{{ values[1] }}</div>
+        <div class="value-cell name-cell">{{ values[2] }}</div>
+
         {% for col, val in zip(columns, values) %}
-            {% if col != "PESEL" %}
-                <div class="grid-cell 
-                    {% if val == 8 %}day-normal{% elif val == 0 %}day-zero{% endif %}
-                    {% if col in ['Имя','Фамилия'] %}fixed-col{% endif %}
+            {% if col != "PESEL" and col not in ["Имя","Фамилия"] %}
+                <div class="day-value 
+                    {% if val == 8 %}day-normal
+                    {% elif val == 0 %}day-zero{% endif %}
                 ">
                     {{ val }}
                 </div>
@@ -41,43 +44,66 @@
 </div>
 
 <style>
-/* === STRUCTURE === */
-
-.hours-grid-header,
-.hours-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
-    /* 👆 ВАЖНО: автоперенос */
-    gap: 6px;
-    margin-bottom: 12px;
+.hours-wrapper {
+    padding: 20px;
 }
 
-.grid-header {
+/* === HEADER GRID === */
+.hours-header-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 20px;
+}
+
+.title-cell {
+    padding: 12px 18px;
     background: #0a2a6b;
-    padding: 10px;
-    font-weight: 600;
     color: #d1e3ff;
+    font-weight: 600;
+    border-radius: 8px;
+    min-width: 130px;
     text-align: center;
-    border-radius: 6px;
 }
 
-.grid-cell {
+.day-header {
+    padding: 12px;
+    min-width: 55px;
+    background: #0a2a6b;
+    color: #d1e3ff;
+    border-radius: 8px;
+    text-align: center;
+}
+
+/* === VALUES GRID === */
+.hours-values-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 10px;
+}
+
+.value-cell.name-cell {
+    padding: 12px 18px;
+    background: #10294d;
+    color: #fff;
+    border-radius: 8px;
+    min-width: 130px;
+    text-align: center;
+}
+
+.day-value {
+    padding: 12px;
+    min-width: 55px;
     background: #0f1e38;
-    padding: 10px;
     color: #eaeef6;
+    border-radius: 8px;
     text-align: center;
-    border-radius: 6px;
 }
 
-/* Цветовая подсветка */
+/* Подсветка */
 .day-normal { background: #103d2e !important; color: #5bffaf; }
 .day-zero   { background: #2d2d2d !important; color: #b5b5b5; }
 
-/* Фиксация левой части (Имя + Фамилия) */
-.fixed-col {
-    background: #10294d !important;
-    font-weight: 600;
-}
 </style>
-
 {% endblock %}
