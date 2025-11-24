@@ -2,20 +2,20 @@
 {% block title %}Табель рабочего времени — TopHire{% endblock %}
 
 {% block content %}
-<div class="hours-wrapper">
-
-    <div class="hours-header">
-        <h1>Табель рабочего времени</h1>
-        <div class="period">Период: {{ month }}</div>
-
-        <div class="hours-controls">
-            <a href="{{ url_for('dashboard') }}" class="btn-back">← Обзор</a>
-            <a href="{{ url_for('view', type='salary', month=month) }}" class="btn-salary">Начисления за этот месяц</a>
+<section class="card">
+    <div class="card-header">
+        <div>
+            <h1 class="page-title">Табель рабочего времени</h1>
+            <p class="page-subtitle">Период: {{ month }}</p>
+        </div>
+        <div class="card-actions">
+            <a href="{{ url_for('dashboard') }}" class="btn btn-secondary">← Обзор</a>
+            <a href="{{ url_for('view', type='salary', month=month) }}" class="btn btn-primary">Начисления за этот месяц</a>
         </div>
     </div>
 
-    <div class="hours-table-container">
-        <table class="hours-table">
+    <div class="table-wrapper">
+        <table class="data-table">
             <thead>
                 <tr>
                     {% for col in columns %}
@@ -30,8 +30,8 @@
                     {% for col, val in zip(columns, values) %}
                         {% if col != "PESEL" %}
                             <td class="
-                                {% if val == 8 %}day-normal
-                                {% elif val == 0 %}day-zero{% endif %}
+                                {% if val == 8 %}text-success
+                                {% elif val == 0 %}text-muted{% endif %}
                             ">
                                 {{ val }}
                             </td>
@@ -42,83 +42,11 @@
         </table>
     </div>
 
-</div>
-
-<style>
-.hours-wrapper {
-    padding: 20px 10px;
-}
-
-.hours-header h1 {
-    margin: 0;
-    font-size: 28px;
-    font-weight: 600;
-}
-
-.period {
-    margin-top: 4px;
-    font-size: 16px;
-    color: #8aa0c0;
-}
-
-.hours-controls {
-    margin-top: 15px;
-    display: flex;
-    gap: 10px;
-}
-
-.btn-back, .btn-salary {
-    padding: 8px 16px;
-    border-radius: 8px;
-    background: #112544;
-    color: #bcd8ff;
-    text-decoration: none;
-    transition: 0.2s;
-}
-
-.btn-back:hover, .btn-salary:hover {
-    background: #19345d;
-}
-
-.hours-table-container {
-    margin-top: 20px;
-    overflow-x: auto;
-    border-radius: 10px;
-}
-
-.hours-table {
-    width: max-content;
-    border-collapse: collapse;
-    font-size: 15px;
-}
-
-.hours-table th {
-    background: #0a2a6b;
-    padding: 10px 14px;
-    font-weight: 600;
-    color: #d1e3ff;
-    white-space: nowrap;
-    border-bottom: 2px solid #1b3d87;
-}
-
-.hours-table td {
-    padding: 10px 14px;
-    text-align: center;
-    white-space: nowrap;
-    background: #0f1e38;
-    color: #eaeef6;
-    border-bottom: 1px solid #22324b;
-}
-
-.day-normal {
-    background: #103d2e !important;
-    color: #5bffaf;
-}
-
-.day-zero {
-    background: #2d2d2d !important;
-    color: #b5b5b5;
-}
-</style>
-
+    {% if total %}
+    <div class="total-badge">
+        <span>Всего часов за месяц:</span>
+        <span>{{ total }}</span>
+    </div>
+    {% endif %}
+</section>
 {% endblock %}

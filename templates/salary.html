@@ -8,28 +8,41 @@
         <div>
             <h1 class="page-title">Начисления и удержания</h1>
             <p class="page-subtitle">
-                Период: <span class="pill">{{ month }}</span>
+                Период: {{ month }}
             </p>
         </div>
         <div class="card-actions">
-            <a href="{{ url_for('dashboard') }}" class="btn btn-ghost">← Обзор</a>
-            <a href="{{ url_for('view', type='hours', month=month) }}" class="btn btn-secondary">
-                Часы за этот месяц
+            <a href="{{ url_for('dashboard') }}" class="btn btn-secondary">← Обзор</a>
+            <a href="{{ url_for('view', type='hours', month=month) }}" class="btn btn-primary">
+                Табель за этот месяц
             </a>
         </div>
     </div>
 
     {% if columns and row %}
-    <div class="salary-grid">
-        {% for column, value in zip(columns, row) %}
-        <div class="salary-card">
-            <span class="salary-label">{{ column }}</span>
-            <span class="salary-value {% if 'Начислено' in column or 'Итого' in column %}salary-value-accent{% elif 'Удержано' in column %}salary-value-danger{% endif %}">
-                {{ value }}
-            </span>
+    <details class="salary-accordion" open>
+        <summary class="salary-summary">
+            <div class="summary-title">Итого к выплате</div>
+            <div class="summary-value" style="font-size: 32px; color: var(--color-success);">
+                {{ row[columns.index('Итого к выплате')] if 'Итого к выплате' in columns else 'N/A' }}
+            </div>
+        </summary>
+        <div class="salary-details-grid">
+            {% for column, value in zip(columns, row) %}
+            {% if column != 'Итого к выплате' %}
+            <div class="salary-details-item">
+                <div class="details-label">{{ column }}</div>
+                <div class="details-value" style="
+                    {% if 'Начислено' in column or 'Итого' in column %}color: var(--color-success);
+                    {% elif 'Удержано' in column %}color: var(--color-danger);
+                    {% else %}color: var(--color-text-main);{% endif %}">
+                    {{ value }}
+                </div>
+            </div>
+            {% endif %}
+            {% endfor %}
         </div>
-        {% endfor %}
-    </div>
+    </details>
     {% else %}
     <p class="text-muted">
         Для этого периода пока нет данных по начислениям.

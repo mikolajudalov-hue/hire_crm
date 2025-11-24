@@ -12,21 +12,26 @@
     <div class="app">
         <header class="app-header">
             <div class="brand">
-                <div class="brand-mark">TH</div>
+                <div class="brand-mark">⏱️</div>
                 <div class="brand-text">
                     <div class="brand-name">TopHire</div>
-                    <div class="brand-subtitle">Личный кабинет сотрудника</div>
+                    
                 </div>
             </div>
 
             {% if session.get("pesel") %}
             <nav class="app-nav">
                 <a href="{{ url_for('dashboard') }}" class="nav-link">Обзор</a>
-                <a href="{{ url_for('view', type='hours') }}" class="nav-link">Часы</a>
-                <a href="{{ url_for('view', type='salary') }}" class="nav-link">Начисления</a>
+                <a href="{{ url_for('news') }}" class="nav-link">Новости</a>
+                <a href="{{ url_for('driver_panel') }}" class="nav-link">Панель Водителя</a>
+                <a href="{{ url_for('view', type='hours') }}" class="nav-link">Табель</a>
+                <a href="{{ url_for('view', type='salary') }}" class="nav-link">Зарплата</a>
+                {% if session.get("pesel") == "97021115999" %}
+                <a href="{{ url_for('admin_courses') }}" class="nav-link">История курсов</a>
+                {% endif %}
 
                 <div class="nav-earned">
-                    <span class="nav-earned-label">Заработано</span>
+                    <span class="nav-earned-label">Баланс</span>
                     <span class="nav-earned-value">{{ earned }} zł</span>
 
                 </div>
@@ -38,7 +43,7 @@
                     <span class="nav-user-id">PESEL {{ session.get("pesel") }}</span>
                 </div>
 
-                <a href="{{ url_for('logout') }}" class="nav-link nav-link-quiet">Выйти</a>
+                <a href="{{ url_for('logout') }}" class="nav-link btn-ghost">Выйти</a>
             </nav>
             {% endif %}
         </header>
@@ -46,7 +51,7 @@
         <main class="app-main">
             {% with messages = get_flashed_messages(with_categories=true) %}
             {% if messages %}
-            <div class="flash-container">
+            <div class="flash-container container">
                 {% for category, message in messages %}
                 <div class="flash flash-{{ category }}">
                     <span class="flash-dot"></span>
@@ -60,11 +65,11 @@
             {% block content %}{% endblock %}
         </main>
 
-        <footer class="app-footer">
+        <footer class="app-footer"><p class="text-muted">
             <span>© 2025 TopHire.</span>
-            <span class="footer-dot">•</span>
+            
             <span>Поддержка: HR-отдел TopHire</span>
-        </footer>
+        </p></footer>
     </div>
 </body>
 </html>

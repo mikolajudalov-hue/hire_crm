@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container">
+    <h1 class="mt-4">{{ article.title }}</h1>
+    <p class="text-muted">Опубликовано: {{ article.created_at.strftime('%d.%m.%Y %H:%M') }}</p>
+    <div class="card mb-4">
+        <div class="card-body">
+            <p class="card-text">{{ article.full_description | replace('\n', '<br>') | safe }}</p>
+        </div>
+    </div>
+    {% if session.pesel == "97021115999" %}
+    <a href="{{ url_for('edit_news', article_id=article.id) }}" class="btn btn-warning">Редактировать</a>
+    <form method="POST" action="{{ url_for('delete_news', article_id=article.id) }}" style="display:inline;" onsubmit="return confirm('Вы уверены, что хотите удалить эту новость?');">
+        <button type="submit" class="btn btn-danger">Удалить</button>
+    </form>
+    {% endif %}
+    <a href="{{ url_for('news') }}" class="btn btn-secondary">К списку новостей</a>
+</div>
+{% endblock %}

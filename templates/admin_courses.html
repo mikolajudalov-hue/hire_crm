@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+
+{% block title %}История курсов{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1 class="mt-4">История курсов</h1>
+    
+    <div class="card mb-4">
+        <div class="card-body">
+            <h5 class="card-title">Фильтр по PESEL</h5>
+            <form method="GET" class="form-inline">
+                <div class="form-group" style="margin-bottom: 0;">
+                    <select name="filter_pesel" class="form-control" style="margin-right: 10px;">
+                        <option value="">Все водители</option>
+                        {% for pesel_tuple in unique_pesels %}
+                            {% set pesel = pesel_tuple[0] %}
+                            <option value="{{ pesel }}" {% if filter_pesel == pesel %}selected{% endif %}>
+                                {{ pesel }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                    <button type="submit" class="btn btn-primary">Фильтровать</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    {% if filter_pesel %}
+    <p class="text-muted">Фильтр: PESEL <strong>{{ filter_pesel }}</strong> 
+        <a href="{{ url_for('admin_courses') }}" style="margin-left: 10px;">Очистить фильтр</a>
+    </p>
+    {% endif %}
+    
+    <div class="table-wrapper">
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>PESEL</th>
+                    <th>Начало</th>
+                    <th>Конец</th>
+                    <th>Длительность</th>
+                    <th>Комментарий</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% if courses %}
+                    {% for course in courses %}
+                    <tr>
+                        <td><strong>{{ course.pesel }}</strong></td>
+                        <td>{{ course.start_time.strftime('%d.%m.%Y %H:%M:%S') }}</td>
+                        <td>
+                            {% if course.end_time %}
+                                {{ course.end_time.strftime('%d.%m.%Y %H:%M:%S') }}
+                            {% else %}
+                                <span style="color: var(--color-success);">В процессе...</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if course.end_time %}
+                                {% set duration = (course.end_time - course.start_time).total_seconds() | int %}
+                                {% set hours = duration // 3600 %}
+                                {% set minutes = (duration % 3600) // 60 %}
+                                {{ hours }}ч {{ minutes }}м
+                            {% else %}
+                                -
+                            {% endif %}
+                        </td>
+                        <td>{{ course.comment or '-' }}</td>
+                    </tr>
+                    {% endfor %}
+                {% else %}
+                <tr>
+                    <td colspan="5" class="text-muted">Курсы не найдены</td>
+                </tr>
+                {% endif %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}
